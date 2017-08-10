@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "declaration": false,
+    "pretty": true,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+
+    "noLib": false,
+    "noEmitHelpers": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitUseStrict": true,
+
+    "suppressImplicitAnyIndexErrors": true,
+
+    "baseUrl": "./",
+
+    "paths": {
+      "*": [
+        "src/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules"
+    ],
+    "types": [
+      "node",
+      "webpack"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "typings"
+  ],
+  "compileOnSave": false,
+  "awesomeTypescriptLoaderOptions": {
+    "resolveGlobs": true,
+    "forkChecker": true,
+    "compiler": "ntypescript"
+  }
+}

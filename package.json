@@ -1,0 +1,103 @@
+{
+  "name": "plain-ts-webpack-seed",
+  "version": "1.0.0",
+  "description": "ts+webpack playground",
+  "main": "index.js",
+  "scripts": {
+    "rimraf": "rimraf",
+    "tslint": "tslint",
+    "typedoc": "typedoc",
+    "typings": "typings",
+    "webpack": "webpack",
+    "webpack-dev-server": "webpack-dev-server",
+
+    "clean": "npm cache clean && npm run rimraf -- node_modules doc typings coverage dist",
+      "clean:dist": "npm run rimraf -- dist",
+        "preclean:install": "npm run clean",
+      "clean:install": "npm set progress=false && npm install",
+        "preclean:start": "npm run clean",
+      "clean:start": "npm start",
+
+    "watch": "npm run watch:local",
+      "watch:local": "npm run build:local -- --watch",
+
+    "build": "npm run build:local",
+      "build:local": "webpack --config config/local.webpack.conf.js --profile --colors --display-error-details --display-cached",
+
+    "server": "npm run server:local",
+      "server:local": "webpack-dev-server --config config/local.webpack.conf.js --inline --progress --profile --watch  --content-base build/",
+
+    "webdriver-manager": "webdriver-manager",
+    "webdriver:update": "npm run webdriver-manager update",
+    "webdriver:start": "npm run webdriver-manager start",
+
+    "lint": "npm run tslint src/**/**/**/*.ts",
+
+      "pree2e": "npm run webdriver:update -- --standalone",
+    "e2e": "npm run protractor",
+      "e2e:live": "npm run e2e -- --elementExplorer",
+
+      "pretest": "npm run lint",
+    "test": "karma start",
+
+    "ci": "npm test && npm run e2e",
+
+    "docs": "npm run typedoc -- --options typedoc.json --exclude '**/*.spec.ts' ./src/",
+
+    "start": "npm run server:dev",
+    "start:hmr": "npm run server:dev:hmr",
+
+    "postinstall": "npm run typings -- install",
+
+      "preversion": "npm test",
+    "version": "npm run build",
+      "postversion": "git push && git push --tags"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleksey-gonchar/plain-ts-webpack-seed"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/aleksey-gonchar/plain-ts-webpack-seed#readme",
+  "dependencies": {
+    "@types/browser-sync": "0.0.34",
+    "@types/node": "*",
+    "@types/rimraf": "0.0.28",
+    "@types/selenium-webdriver": "2.44.*",
+    "@types/webpack": "1.12.35",
+
+    "typedoc": "0.5.0",
+    "typescript": "2.0.3",
+    "typings": "1.4.0",
+    "tslint": "^3.0.0",
+
+    "awesome-typescript-loader": "2.2.4",
+    "css-loader": "0.25.0",
+    "es6-promise-loader": "1.0.2",
+    "exports-loader": "0.6.3",
+    "expose-loader": "0.7.1",
+    "file-loader": "0.9.0",
+    "import-glob-loader": "1.1.0",
+    "imports-loader": "0.6.5",
+    "json-loader": "0.5.4",
+    "raw-loader": "0.5.1",
+    "source-map-loader": "0.1.5",
+    "tslint-loader": "2.1.5",
+    "url-loader": "0.5.7",
+
+    "http-server": "0.9.0",
+    "html-webpack-plugin": "2.22.0",
+    "compression-webpack-plugin": "0.3.1",
+    "copy-webpack-plugin": "3.0.1",
+
+    "webpack": "2.1.0-beta.25",
+    "webpack-dev-server": "2.1.0-beta.6",
+    "webpack-md5-hash": "0.0.5",
+    "webpack-merge": "0.14.1"
+  },
+  "engines": {
+    "node": "6.8.1"
+  }
+}

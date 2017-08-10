@@ -1,0 +1,6 @@
+node_modules
+*.log
+typings
+build/**/*.js
+build/**/*.map
+
