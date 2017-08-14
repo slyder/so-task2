@@ -4,6 +4,7 @@ const autoprefixer = require('autoprefixer')
 const webpackMerge = require('webpack-merge')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 
 const helpers = require('./helpers')
@@ -58,6 +59,24 @@ module.exports = webpackMerge(config.data, {
         },
         context: '/'
       }
-    })
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: helpers.root('src', 'assets', 'index.html'),
+      hash: true,
+      chunksSortMode: 'dependency',
+      // minify: {
+      //   collapseWhitespace: !DEBUG
+      // }
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'iframe.html',
+      template: helpers.root('src', 'assets', 'iframe.html'),
+      hash: true,
+      chunksSortMode: 'dependency',
+      // minify: {
+      //   collapseWhitespace: !DEBUG
+      // }
+    }),
   ]
 })

@@ -1,3 +1,12 @@
 'use strict'
 
-console.log('main.js loaded')
+
+import ClientServer from './client-server';
+import Mediator from './mediator';
+
+const topWindow = (top === window);
+if (topWindow) {
+    new Mediator();
+} else {
+    new ClientServer
+}
