@@ -8,40 +8,60 @@ const TYPE_CLIENT = 'client';
 export default class ClientServer extends MessaingBase {
 
     type: string;
+    synWith: string = null;
 
     constructor() {
         super();
+
+        this.id = 'client-server_' + Math.round(Math.random() * 10000);
         this.type = Math.random() > 0.5 ? TYPE_CLIENT : TYPE_SERVER;
-        this.callApi(top,'register', this.type)
-            .catch(console.error);
+        this.sendMessage(top, 'register', { id: this.id, type: this.type });
     }
 
     registerMessages() {
         this.registerMessage('serverRegistered', this.onServerRegistered.bind(this));
         this.registerMessage('SYN', this.onSynMessage.bind(this));
-        this.registerMessage('test', this.onTestMessage.bind(this));
+        this.registerMessage('SYN-ACK', this.onSynAckMessage.bind(this));
+        this.registerMessage('ACK', this.onAckMessage.bind(this));
     }
 
     /**
      * Метод вызывается когда регистрируется новый сервер.
      */
-    onServerRegistered(mediator, mid, serverName) {
-        console.log('onServerRegistered', { mediator, mid, serverName });
-
-        this
-            .callApi(top, 'sendMessage', {
-                'sendToServer': serverName,
-                'message': 'SYN'
-            })
-            .catch(console.error);
+    onServerRegistered({ data: serverId }) {
+        console.log('onServerRegistered', serverId);
+        this.sendMessage(top, 'sendById', {
+            message: 'SYN',
+            sendTo: serverId,
+            sendFrom: this.id
+        });
     }
 
-    onSynMessage(mediator, mid, serverName) {
-        console.log('onSynMessage', mediator, mid, serverName);
+    onSynMessage({ data: synFrom }) {
+        console.log('onSynMessage from', synFrom);
+        this.synWith = synFrom;
+        this.sendMessage(top, 'sendById', {
+            message: 'SYN-ACK',
+            sendTo: synFrom,
+            sendFrom: this.id
+        });
     }
 
-    onTestMessage() {
-        console.log('!!!test message');
+    onSynAckMessage({ data: synAckFrom }) {
+        console.log('onSynAckMessage from', synAckFrom);
+        this.sendMessage(top, 'sendById', {
+            message: 'ACK',
+            sendTo: synAckFrom,
+            sendFrom: this.id
+        });
+    }
+
+    onAckMessage({ data: ackFrom }) {
+        console.log('onAckMessage from', ackFrom);
+
+        if (this.synWith === ackFrom) {
+            console.log('TCP socket connection is ESTABLISHED.');
+        }
     }
 
 }

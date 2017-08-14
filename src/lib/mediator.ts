@@ -4,59 +4,53 @@ import MessaingBase from './messaging-base';
 
 export default class Mediator extends MessaingBase {
 
-    serverId: number = 1;
-    servers: any[] = [];
     clients: any[] = [];
 
     constructor() {
         super();
+
+        this.registerClient(top, 'top', 'mediator');
+    }
+
+    registerClient(client, id, type) {
+        console.log('register', {client, id, type});
+        this.clients.push({client, id, type});
     }
 
     registerMessages() {
         this.registerMessage('register', this.onRegisterMessage.bind(this));
-        this.registerMessage('sendMessage', this.onSendMessageMessage.bind(this));
+        this.registerMessage('sendById', this.onSendByIdMessage.bind(this));
     }
 
-    onRegisterMessage(iframe, mid, data) {
-        switch (data) {
+    onRegisterMessage({ iframe, data }) {
+        switch (data.type) {
             case 'client':
-                // this.clients.push(iframe);
-                // if (this.servers.length > 0) {
-                //     console.log('111')
-                //     this.servers.forEach((server) => {
-                //         this.sendMessage(iframe, 'serverRegistered', server.id);
-                //     })
-                // }
+                this.clients
+                    .filter(c => c.type === 'server')
+                    .forEach((c) => {
+                        this.sendMessage(iframe, 'serverRegistered', c.id);
+                    });
                 break;
 
             case 'server':
-                this.servers.push(iframe);
-                this.callApi(iframe, 'test', {});
-                console.log('tttt');
-                // iframe.id = 'sid@' + this.serverId++;
-                // if (this.clients.length > 0) {
-                //     console.log('222')
-                //     this.clients.forEach((client) => {
-                //         this.sendMessage(client, 'serverRegistered', iframe.id);
-                //     })
-                // }
+                this.clients
+                    .filter(c => c.type === 'client')
+                    .forEach((c) => {
+                        this.sendMessage(c.client, 'serverRegistered', data.id);
+                    });
                 break;
 
             default:
                 return console.error('invalid client type', data);
         }
 
-        this.sendApiResponse(iframe, mid, true);
+        this.registerClient(iframe, data.id, data.type);
     }
 
-    onSendMessageMessage(iframe, mid, messageData) {
-        console.log('onSendMessageMessage', messageData);
-
-        const { sendToServer, message, data } = messageData;
-        const server = this.servers.find((s) => s.id === sendToServer);
-
-        this.callApi(server, message, data)
-            .catch(console.error);
+    onSendByIdMessage({ data: { sendTo, sendFrom, message } } ) {
+        console.log('onSendMessageMessage', sendFrom, '->', sendTo, ':', message);
+        const clientData = this.clients.find((c) => c.id === sendTo);
+        this.sendMessage(clientData.client, message, sendFrom);
     }
 
 }
