@@ -1,8 +1,8 @@
 'use strict'
 
-import MessaingBase from './messaging-base';
+import MessagingBase from './messaging-base';
 
-export default class Mediator extends MessaingBase {
+export default class Mediator extends MessagingBase {
 
     clients: any[] = [];
 

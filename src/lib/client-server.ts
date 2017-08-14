@@ -1,11 +1,11 @@
 'use strict'
 
-import MessaingBase from './messaging-base';
+import MessagingBase from './messaging-base';
 
 const TYPE_SERVER = 'server';
 const TYPE_CLIENT = 'client';
 
-export default class ClientServer extends MessaingBase {
+export default class ClientServer extends MessagingBase {
 
     type: string;
     synWith: string = null;
@@ -60,7 +60,7 @@ export default class ClientServer extends MessaingBase {
         console.log('onAckMessage from', ackFrom);
 
         if (this.synWith === ackFrom) {
-            console.log('TCP socket connection is ESTABLISHED.');
+            console.log('connection is ESTABLISHED.');
         }
     }
 
